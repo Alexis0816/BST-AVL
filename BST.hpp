@@ -71,10 +71,7 @@ private:
     }
 
     int height(Node* nodo) {
-        if (nodo == nullptr) return -1;
-        int hl = height(nodo->left);
-        int hr = height(nodo->right);
-        return max(hl, hr) + 1;
+        return nodo == nullptr? -1 :  1 + max(nodo->left, nodo->right); // Credits: Daniel Casquino
     }
 
     bool isBalanced(Node* nodo) {
