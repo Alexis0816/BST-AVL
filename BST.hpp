@@ -75,10 +75,7 @@ private:
     }
 
     bool isBalanced(Node* nodo) {
-        if (nodo == nullptr) return true;
-        int hl = height(nodo->left);
-        int hr = height(nodo->right);
-        return abs(hl - hr) <= 1 && isBalanced(nodo->left) && isBalanced(nodo->right);
+        return nodo == nullptr? true : abs(height(nodo->left)-height(nodo->right)) <= 1 && isBalanced(nodo->left) && isBalanced(nodo->right);
     }
 
     // mine idea (I don't know if works) --> It works
@@ -111,7 +108,7 @@ private:
     }
 
     void remove(Node* &root, T data){
-        if(root == nullptr){throw  "arbol vacio";}
+        if(root == nullptr) throw "arbol vacio";
         else if(data < root->data) {remove(root->left,data);}
         else if(data > root->data) {remove(root->right,data);}
         else{
@@ -143,15 +140,15 @@ private:
         };
     }
 
-    T successor(Node* raiz, T value){
+    T successor(Node* root, T value){
         Node* current = find_root(value);
-        if (current == nullptr) throw "successor no encontrado";
+        if (current == nullptr) throw "sucesor no encontrado";
         if (current->right != nullptr){
             return minValue(current->right);
         }
         else{
             Node* successor = nullptr;
-            Node* ancestor = raiz;
+            Node* ancestor = root;
             while(ancestor != current){
                 if (current->data < ancestor->data){
                     successor = ancestor;
@@ -163,15 +160,15 @@ private:
         }
     }
 
-    T predecessor(Node* raiz, T value){
+    T predecessor(Node* root, T value){
         Node* current = find_root(value);
-        if (current == nullptr) throw "predecessor no encontrado";
+        if (current == nullptr) throw "predecesor no encontrado";
         if (current->left != nullptr){
             return minValue(current->left);
         }
         else{
             Node* predecessor = nullptr;
-            Node* ancestor = raiz;
+            Node* ancestor = root;
             while(ancestor != current){
                 if (current->data > ancestor->data){
                     predecessor = ancestor;
