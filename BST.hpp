@@ -164,7 +164,7 @@ private:
         Node* current = find_root(value);
         if (current == nullptr) throw "predecesor no encontrado";
         if (current->left != nullptr){
-            return minValue(current->left);
+            return maxValue(current->left);
         }
         else{
             Node* predecessor = nullptr;
