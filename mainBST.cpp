@@ -54,10 +54,10 @@ int main(){
   // para verificar que ya no esté el nodo con valor 1
   BST.display_in_order(); cout<<endl;
 
-  // Valor posterior próximo a 15 --> 13
+  // Valor anterior próximo a 15 --> 13
   cout<<endl<<"Predecesor de 15: "<<BST.predecessor(15)<<endl;
 
-  // Valor anterior próximo a 15 --> 18
+  // Valor posterior próximo a 15 --> 18
   cout<<"Sucesor de 15: "<<BST.successor(15)<<endl;
 
 
