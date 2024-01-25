@@ -5,7 +5,7 @@
 using namespace std;
 
 template <typename T>
-class BSTree
+class AVLTree
 {
 private:
     int _size{};
@@ -20,7 +20,7 @@ private:
     Node *raiz;
 
 public:
-    BSTree() : raiz(nullptr) {}
+    AVLTree() : raiz(nullptr) {}
 
     int size() { return _size; };
 
@@ -74,7 +74,7 @@ private:
         {
             return root;
         }
-    }
+    } // Busca y devuelve un nodo con valor == data
 
     bool find(Node *nodo, T data)
     {
@@ -92,17 +92,58 @@ private:
         {
             return true;
         }
-    }
+    } // True si "data" existe en el arbol, false otherwise
 
     int height(Node *nodo)
     {
         return nodo == nullptr ? -1 : 1 + max(height(nodo->left), height(nodo->right)); // Credits: Daniel Casquino
-    }
+    }                                                                                   // One liner chistoso
 
     bool isBalanced(Node *nodo)
     {
         return nodo == nullptr ? true : abs(height(nodo->left) - height(nodo->right)) <= 1 && isBalanced(nodo->left) && isBalanced(nodo->right);
     }
+
+    int getBalanceFactor(Node *node)
+    {
+        if (!node)
+        {
+            return 0;
+        }
+        return height(node->left) - height(node->right);
+    } // Devuelve el balanceFactor de un nodo
+
+#pragma region Rotations
+
+    void leftRotation(Node *&x)
+    {
+        // Guardamos el nodo derecho (el del medio entre los dos nodos)
+        Node *y = x->right;
+        // El izquierdo del derecho
+        Node *T2 = y->left;
+
+        // Conectamos el central con el superior
+        y->left = x;
+        // Conectamos el superior con el de abajo
+        x->right = T2;
+
+        // Reasignamos y rompemos el enlace extra
+        x = y;
+    }
+
+    void rightRotation(Node *&y)
+    {
+        Node *y = x->left;
+        Node *T2 = y->right;
+
+        y->right = x;
+        x->left = T2;
+
+        x = y;
+    } // Lo mismo pero al reves
+    // Me duelen las neuronas que ya no tengo
+
+#pragma endregion
 
     // mine idea (I don't know if works) --> It works
     void insert(Node *&root, T data)
@@ -120,7 +161,46 @@ private:
         {
             insert(root->left, data);
         }
-    }
+        else
+        {
+            return;
+        }
+
+        int bF = getBalanceFactor(root); // Revisamos si el nodo esta mareadito
+
+        // Perform rotations if needed
+
+        // Left Heavy
+        if (bF > 1)
+        {
+            if (data < root->left->data)
+            {
+                // LL Rotation
+                rightRotation(root);
+            }
+            else
+            {
+                // LR Rotation
+                leftRotation(root->left);
+                rightRotation(root);
+            }
+        }
+        // Right Heavy
+        else if (bF < -1)
+        {
+            if (data > root->right->data)
+            {
+                // RR Rotation
+                leftRotation(root);
+            }
+            else
+            {
+                // RL Rotation
+                rightRotation(root->right);
+                leftRotation(root);
+            }
+        }
+    } // Root = nodo actual
 
     T maxValue(Node *root)
     {
@@ -155,7 +235,7 @@ private:
         else if (data > root->data)
         {
             remove(root->right, data);
-        }
+        } // Busca el nodo hasta encontrar el que se quiere eliminar, mismo principio que el insert
         else
         {
             // sin hijos
