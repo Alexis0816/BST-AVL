@@ -3,10 +3,10 @@ AED : Tarea BST-AVL
 Integrantes:
 
 
--Alexis Raza
+-Alexis Raza : 20221
 
 
--Gabriel Blanco
+-Gabriel Blanco : 202210049
 
 
--Daniel Casquino
+-Daniel Casquino : 202110056
