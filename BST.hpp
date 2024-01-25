@@ -38,13 +38,21 @@ public:
         insert(this->raiz, data);
     }
 
+    void insert(std::initializer_list<T> &&data)
+    {
+        for (const auto e : data)
+        {
+            insert(this->raiz, e);
+        }
+    }
+
     T maxValue() { return maxValue(this->raiz); } // Listo
 
     T minValue() { return minValue(this->raiz); } // Listo
 
     void remove(T data)
     {
-        cout << "Removing ..." << endl;
+        cout << "Removing " << data << " ..." << endl;
         remove(this->raiz, data);
     }
 

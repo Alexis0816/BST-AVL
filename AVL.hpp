@@ -2,6 +2,7 @@
 #include <iostream>
 #include <queue>
 #include <stack>
+#include <initializer_list>
 using namespace std;
 
 template <typename T>
@@ -38,13 +39,24 @@ public:
         insert(this->raiz, data);
     }
 
-    T maxValue() { return maxValue(this->raiz); } // Listo
+    void insert(std::initializer_list<T> &&data)
+    {
+        for (const auto e : data)
+        {
+            insert(this->raiz, e);
+        }
+    } // Insert para varios valores a la vez
+
+    T maxValue()
+    {
+        return maxValue(this->raiz);
+    } // Listo
 
     T minValue() { return minValue(this->raiz); } // Listo
 
     void remove(T data)
     {
-        cout << "Removing ..." << endl;
+        cout << "Removing " << data << " ..." << endl;
         remove(this->raiz, data);
     }
 
@@ -120,12 +132,12 @@ private:
         // Guardamos el nodo derecho (el del medio entre los dos nodos)
         Node *y = x->right;
         // El izquierdo del derecho
-        Node *T2 = y->left;
+        Node *bottom = y->left;
 
         // Conectamos el central con el superior
         y->left = x;
         // Conectamos el superior con el de abajo
-        x->right = T2;
+        x->right = bottom;
 
         // Reasignamos y rompemos el enlace extra
         x = y;
@@ -133,13 +145,13 @@ private:
 
     void rightRotation(Node *&y)
     {
-        Node *y = x->left;
-        Node *T2 = y->right;
+        Node *x = y->left;
+        Node *bottom = x->right;
 
-        y->right = x;
-        x->left = T2;
+        x->right = y;
+        y->left = bottom;
 
-        x = y;
+        y = x;
     } // Lo mismo pero al reves
     // Me duelen las neuronas que ya no tengo
 
@@ -168,9 +180,7 @@ private:
 
         int bF = getBalanceFactor(root); // Revisamos si el nodo esta mareadito
 
-        // Perform rotations if needed
-
-        // Left Heavy
+        // L
         if (bF > 1)
         {
             if (data < root->left->data)
@@ -185,7 +195,7 @@ private:
                 rightRotation(root);
             }
         }
-        // Right Heavy
+        // R
         else if (bF < -1)
         {
             if (data > root->right->data)
@@ -267,7 +277,42 @@ private:
                 root->data = temp;
                 remove(root->right, temp);
             }
-        };
+        }
+
+        // Hacemos lo mismo que al insertar
+
+        int bF = getBalanceFactor(root);
+
+        // L
+        if (bF > 1)
+        {
+            if (data < root->left->data)
+            {
+                // LL Rotation
+                rightRotation(root);
+            }
+            else
+            {
+                // LR Rotation
+                leftRotation(root->left);
+                rightRotation(root);
+            }
+        }
+        // R
+        else if (bF < -1)
+        {
+            if (data > root->right->data)
+            {
+                // RR Rotation
+                leftRotation(root);
+            }
+            else
+            {
+                // RL Rotation
+                rightRotation(root->right);
+                leftRotation(root);
+            }
+        }
     }
 
     T successor(Node *root, T value)
